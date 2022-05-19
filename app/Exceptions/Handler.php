@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof ValidationException) {
                 return response()->json([
                     'errors' => $e->errors()
-                ]);
+                ], 422);
             }elseif ($e instanceof ModelNotFoundException) {
                 return response()->json([
                     'errors' => $e->getMessage()

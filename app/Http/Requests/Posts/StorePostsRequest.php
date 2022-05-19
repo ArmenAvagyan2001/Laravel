@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Posts;
 
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StorePostsRequest extends FormRequest
 {

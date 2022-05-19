@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Posts\PostsController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('verify-email', [AuthController::class, 'verify']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('users', UserController::class);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('posts', PostsController::class);
-    Route::get('user/{id}',[PostsController::class,'getUser']);
 });

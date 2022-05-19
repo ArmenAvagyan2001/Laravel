@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Posts;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Posts\StorePostsRequest;
@@ -19,7 +19,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return response()->json(['posts' => Post::all()]);
+        //
     }
 
 
@@ -31,14 +31,12 @@ class PostsController extends Controller
      */
     public function store(StorePostsRequest $request)
     {
-//        dd(auth()->user()->getAuthIdentifier());
-        $validated = $request->validated();
         $image = $request->file('image');
         $path = $image->store('public/images');
         $post = Post::create([
             'name' => $request->name,
             'subject' => $request->subject,
-            'image' => substr($path,6),
+            'image' => substr($path, 6),
             'user_id' => auth()->user()->getAuthIdentifier()
         ]);
 
@@ -55,7 +53,7 @@ class PostsController extends Controller
      */
     public function update(UpdatePostsRequest $request, Post $posts)
     {
-        //
+
     }
 
     /**
@@ -64,18 +62,18 @@ class PostsController extends Controller
      * @param Post $post
      * @return JsonResponse
      */
-    public function destroy (Post $post)
+    public function destroy(Post $post)
     {
+        $path = public_path('/storage' . $post->image);
+        if (file_exists($path)) {
+            unlink($path);
+        }
         $post->delete();
         return response()->json(['message' => 'Deleted']);
     }
 
-    public function show() {
-
-    }
-
-    public function getUser($id) {
-        $user = auth()->user()->with('posts')->first();
-        dd($user->posts);
+    public function show($id)
+    {
+        return response()->json(['posts' => auth()->user()->where('id', $id)->with('posts')->first()->posts]);
     }
 }

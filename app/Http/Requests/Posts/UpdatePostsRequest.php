@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Posts;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdatePostsRequest extends FormRequest
 {
