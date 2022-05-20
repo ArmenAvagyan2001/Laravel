@@ -15,7 +15,7 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return void
      */
     public function index()
     {
@@ -29,13 +29,16 @@ class PostsController extends Controller
      * @param StorePostsRequest $request
      * @return JsonResponse
      */
-    public function store(StorePostsRequest $request)
+    public function store(StorePostsRequest $request): JsonResponse
     {
         $image = $request->file('image');
         $path = $image->store('public/images');
+
+        $data = $request->validated();
+
         $post = Post::create([
-            'name' => $request->name,
-            'subject' => $request->subject,
+            'name' => $data['name'],
+            'subject' => $data['subject'],
             'image' => substr($path, 6),
             'user_id' => auth()->user()->getAuthIdentifier()
         ]);
@@ -51,10 +54,23 @@ class PostsController extends Controller
      * @param Post $posts
      * @return JsonResponse
      */
-    public function update(UpdatePostsRequest $request, Post $post)
+    public function update(UpdatePostsRequest $request, Post $post): JsonResponse
     {
-        $userUpdate = $request->validated();
-        $post->update($userUpdate);
+        $data = $request->validated();
+        $image = $request->file('image');
+        if ($image != null) {
+
+            $path = $image->store('public/images');
+
+            $post->update([
+                'name' => $data['name'],
+                'subject' => $data['subject'],
+                'image' => substr($path, 6)
+            ]);
+        }else {
+            $post->update($data);
+        }
+
         return response()->json(['post' => $post]);
     }
 
@@ -64,7 +80,7 @@ class PostsController extends Controller
      * @param Post $post
      * @return JsonResponse
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post): JsonResponse
     {
         $path = public_path('/storage' . $post->image);
         if (file_exists($path)) {
@@ -74,8 +90,12 @@ class PostsController extends Controller
         return response()->json(['message' => 'Deleted']);
     }
 
-    public function show($id)
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function show($id): JsonResponse
     {
-        return response()->json(['posts' => auth()->user()->where('id', $id)->with('posts')->first()->posts]);
+        return response()->json(['posts' => auth()->user()->with('posts')->first()->posts]);
     }
 }

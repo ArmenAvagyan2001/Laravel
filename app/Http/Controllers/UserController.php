@@ -54,11 +54,13 @@ class UserController extends Controller
     {
         $user_email = $user->email;
 
+        $data = $request->validated();
+
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password'=> Hash::make($request->password),
-            'email_verified_at' => $request->email_verified_at
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password'=> Hash::make($data['password']),
+            'email_verified_at' => $data['email_verified_at']
         ]);
 
         if ($user->email != $user_email){

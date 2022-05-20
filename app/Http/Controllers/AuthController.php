@@ -19,7 +19,7 @@ class AuthController extends Controller
      * @param $user
      * @return JsonResponse
      */
-    public function response ($user)
+    public function response ($user): JsonResponse
     {
         $token = $user->createToken('token_name')->plainTextToken;
 
@@ -33,19 +33,21 @@ class AuthController extends Controller
     /**
      * @param AuthRegisterRequest $request
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function register (AuthRegisterRequest $request)
+    public function register (AuthRegisterRequest $request): JsonResponse
     {
+        $data = $request->validated();
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
             'verify_token' => bin2hex(random_bytes(10)),
-            'role_id' => 2
+            'role_id' => User::CLIENT,
         ]);
 
         Mail::to($user)->send(new UserRegistrationMail($user));
-
         return $this->response($user);
     }
 
@@ -53,7 +55,7 @@ class AuthController extends Controller
      * @param AuthLoginRequest $request
      * @return JsonResponse
      */
-    public function login(AuthLoginRequest $request)
+    public function login(AuthLoginRequest $request): JsonResponse
     {
         $validated = $request->validated();
         if ( !Auth::attempt( $validated ) ) {
@@ -67,10 +69,9 @@ class AuthController extends Controller
 
 
     /**
-     * @param User $user
      * @return JsonResponse
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         Auth::user()->tokens()->delete();
         return response()->json(['message' => 'You have left this site']);
