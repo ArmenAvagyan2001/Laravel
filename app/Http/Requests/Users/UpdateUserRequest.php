@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Posts;
+namespace App\Http\Requests\Users;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdatePostsRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +22,12 @@ class UpdatePostsRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    {   $user_id = $this->route('user')->id;
         return [
-            'name' => ['required', 'min:3'],
-            'subject' => ['required', 'min:3'],
-//            'image' => ['required', 'image:jpg,jpeg,png,bmp,gif,svg']
+            'name' => ['min:2'],
+            'email' => ['email', "unique:users,email,$user_id"],
+            'password' => ['min:6'],
+            'password_confirmation' => ['same:password'],
         ];
     }
 }

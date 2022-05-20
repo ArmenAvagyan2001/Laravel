@@ -49,11 +49,13 @@ class PostsController extends Controller
      *
      * @param UpdatePostsRequest $request
      * @param Post $posts
-     * @return void
+     * @return JsonResponse
      */
-    public function update(UpdatePostsRequest $request, Post $posts)
+    public function update(UpdatePostsRequest $request, Post $post)
     {
-
+        $userUpdate = $request->validated();
+        $post->update($userUpdate);
+        return response()->json(['post' => $post]);
     }
 
     /**
