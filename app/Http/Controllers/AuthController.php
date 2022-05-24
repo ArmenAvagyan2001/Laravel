@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\AuthLoginRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
 use App\Mail\UserRegistrationMail;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class AuthController extends Controller
     /**
      * @param AuthRegisterRequest $request
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function register (AuthRegisterRequest $request): JsonResponse
     {
@@ -61,6 +62,10 @@ class AuthController extends Controller
         if ( !Auth::attempt( $validated ) ) {
             return response()->json([
                 'message' => 'Unauthorized',
+            ], 401);
+        }elseif (Auth::user()->email_verified_at == null) {
+            return response()->json([
+                'message' => 'you need to verify your email address',
             ], 401);
         }
 

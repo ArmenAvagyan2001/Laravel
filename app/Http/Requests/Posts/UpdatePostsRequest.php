@@ -26,9 +26,9 @@ class UpdatePostsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:3'],
-            'subject' => ['required', 'min:3'],
-//            'image' => ['required', 'image:jpg,jpeg,png,bmp,gif,svg']
+            'name' => ['min:3'],
+            'subject' => ['min:3'],
+            'image' => []
         ];
     }
 }

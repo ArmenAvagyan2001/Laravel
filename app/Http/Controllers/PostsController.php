@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Posts\StorePostsRequest;
 use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(['posts' => auth()->user()->posts->toArray()]);
     }
 
 
@@ -51,25 +57,21 @@ class PostsController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdatePostsRequest $request
-     * @param Post $posts
+     * @param Post $post
      * @return JsonResponse
      */
     public function update(UpdatePostsRequest $request, Post $post): JsonResponse
     {
+//        $image = $request->file('image');
+//        $path = $image->store('public/images');
+
         $data = $request->validated();
-        $image = $request->file('image');
-        if ($image != null) {
 
-            $path = $image->store('public/images');
-
-            $post->update([
-                'name' => $data['name'],
-                'subject' => $data['subject'],
-                'image' => substr($path, 6)
-            ]);
-        }else {
-            $post->update($data);
-        }
+        $post->update([
+            'name' => $data['name'],
+            'subject' => $data['subject'],
+//            'image' => substr($path, 6)
+        ]);
 
         return response()->json(['post' => $post]);
     }
@@ -77,10 +79,11 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param Post $post
      * @return JsonResponse
      */
-    public function destroy(Post $post): JsonResponse
+    public function destroy(Request $request, Post $post): JsonResponse
     {
         $path = public_path('/storage' . $post->image);
         if (file_exists($path)) {
@@ -88,14 +91,5 @@ class PostsController extends Controller
         }
         $post->delete();
         return response()->json(['message' => 'Deleted']);
-    }
-
-    /**
-     * @param $id
-     * @return JsonResponse
-     */
-    public function show($id): JsonResponse
-    {
-        return response()->json(['posts' => auth()->user()->with('posts')->first()->posts]);
     }
 }

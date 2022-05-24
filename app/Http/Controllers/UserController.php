@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Users\UpdateUserRequest;
 use App\Mail\UserRegistrationMail;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(User $user)
     {
@@ -33,22 +39,11 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param UpdateUserRequest $request
+     * @param User $user
+     * @return JsonResponse
      */
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -60,7 +55,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password'=> Hash::make($data['password']),
-            'email_verified_at' => $data['email_verified_at']
+            'email_verified_at' => $request['email_verified_at']
         ]);
 
         if ($user->email != $user_email){
@@ -74,8 +69,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param User $user
+     * @return JsonResponse
      */
     public function destroy( User $user )
     {

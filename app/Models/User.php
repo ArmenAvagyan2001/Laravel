@@ -14,6 +14,9 @@ class User extends Authenticatable
 
     const ADMIN = 1;
     const CLIENT = 2;
+    /**
+     * @var mixed
+     */
 
     /**
      * The attributes that are mass assignable.
@@ -51,5 +54,4 @@ class User extends Authenticatable
     public function posts () {
         return $this->hasMany(Post::class);
     }
-
 }
