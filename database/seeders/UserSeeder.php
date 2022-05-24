@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'role_id' => User::ADMIN,
             'name' => 'Admin',
-            'email' => 'admin@admin.com',
+            'email' => 'Admin@Admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin1234'),
         ]);

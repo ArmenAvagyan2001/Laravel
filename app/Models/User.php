@@ -51,6 +51,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function emailTemplates ()
+    {
+        return $this->belongsToMany(EmailTemplate::class, 'users_email_templates', 'user_id', 'email_templates_id');
+    }
+
     public function posts () {
         return $this->hasMany(Post::class);
     }

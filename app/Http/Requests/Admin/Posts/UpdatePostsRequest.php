@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Posts;
+namespace App\Http\Requests\Admin\Posts;
 
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePostsRequest extends FormRequest
+class UpdatePostsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +26,9 @@ class StorePostsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:3'],
-            'subject' => ['required', 'min:3'],
-            'image' => ['required', 'image:jpg,jpeg,png,bmp,gif,svg']
+            'name' => ['min:3'],
+            'subject' => ['min:3'],
+            'image' => []
         ];
     }
 }

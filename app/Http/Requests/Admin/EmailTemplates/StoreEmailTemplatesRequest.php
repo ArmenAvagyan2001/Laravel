@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\Admin\EmailTemplates;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class StoreEmailTemplatesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,11 @@ class UpdateUserRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {   $user_id = $this->route('user')->id;
+    {
         return [
-            'name' => ['min:2'],
-            'email' => ['email', "unique:users,email,$user_id"],
-            'password' => ['min:6'],
-            'password_confirmation' => ['same:password'],
+            'subject' => ['min:2'],
+            'title' => ['min:2'],
+            'content' => ['min:2']
         ];
     }
 }

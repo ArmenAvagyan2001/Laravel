@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Posts\StorePostsRequest;
-use App\Http\Requests\Posts\UpdatePostsRequest;
+use App\Http\Requests\Admin\Posts\StorePostsRequest;
+use App\Http\Requests\Admin\Posts\UpdatePostsRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-class AdminPostsController extends Controller
+class PostsController extends Controller
 {
 
     public function __construct()
