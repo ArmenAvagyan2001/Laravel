@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostsController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\AdminPostsController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,8 +23,18 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('verify-email', [AuthController::class, 'verify']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('users', UserController::class);
+//Route::middleware('auth:sanctum')->group( function () {
+//    Route::resource('users', AdminUserController::class);
+//    Route::post('logout', [AuthController::class, 'logout']);
+//    Route::resource('posts', AdminPostsController::class);
+//});
+
+Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
+    Route::resource('users', AdminUserController::class);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::resource('posts', PostsController::class);
+    Route::resource('posts', AdminPostsController::class);
+});
+
+Route::group(['middleware' => ['auth:sanctum', 'client']], function () {
+    Route::post('logout', [AuthController::class, 'logout']);
 });

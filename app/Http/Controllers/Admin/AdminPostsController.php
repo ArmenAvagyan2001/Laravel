@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Posts\StorePostsRequest;
 use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Models\Post;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-class PostsController extends Controller
+class AdminPostsController extends Controller
 {
 
     public function __construct()
