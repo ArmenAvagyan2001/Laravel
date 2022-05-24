@@ -29,12 +29,12 @@ Route::get('verify-email', [AuthController::class, 'verify']);
 //    Route::resource('posts', AdminPostsController::class);
 //});
 
-Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'admin']], function () {
     Route::resource('users', AdminUserController::class);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('posts', AdminPostsController::class);
 });
 
-Route::group(['middleware' => ['auth:sanctum', 'client']], function () {
+Route::group(['prefix' => "client", 'middleware' => ['auth:sanctum', 'client']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });

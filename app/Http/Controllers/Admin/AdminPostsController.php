@@ -26,7 +26,8 @@ class AdminPostsController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(['posts' => auth()->user()->posts->toArray()]);
+//        return response()->json(['posts' => auth()->user()->posts->toArray()]);
+        return response()->json(['posts' => Post::all()]);
     }
 
 
