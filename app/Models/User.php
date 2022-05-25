@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function emailTemplates ()
     {
-        return $this->belongsToMany(EmailTemplate::class, 'users_email_templates', 'user_id', 'email_templates_id');
+        return $this->belongsToMany(EmailTemplate::class, 'users_email_templates');
     }
 
     public function posts () {

@@ -35,7 +35,6 @@ class UsersEmailTemplatesController extends Controller
                 Mail::to($userEmail)->send(new SendUserEmailTemplates($item));
             }
             $user->emailTemplates()->attach($value);
-
         }
     }
 
@@ -46,17 +45,6 @@ class UsersEmailTemplatesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

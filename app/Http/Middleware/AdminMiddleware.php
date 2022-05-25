@@ -20,6 +20,6 @@ class AdminMiddleware
         if (auth()->user()->role_id == User::ADMIN)
             return $next($request);
         else
-            return response()->json(['errors'=>'Unauthorized'], 403);
+            return response()->json(['errors'=>'Forbidden'], 403);
     }
 }

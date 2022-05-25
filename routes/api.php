@@ -39,6 +39,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'Admin']], f
     Route::resource('posts', PostsController::class);
 });
 
-Route::group(['prefix' => "client", 'middleware' => ['auth:sanctum', 'client']], function () {
+Route::group(['prefix' => 'client', 'middleware' => ['auth:sanctum', 'client']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });

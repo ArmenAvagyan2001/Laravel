@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('email_templates_id');
-            $table->foreign('email_templates_id')->references('id')->on('email_templates')->onDelete('cascade');
+            $table->unsignedBigInteger('email_template_id');
+            $table->foreign('email_template_id')->references('id')->on('email_templates')->onDelete('cascade');
             $table->timestamps();
         });
     }
