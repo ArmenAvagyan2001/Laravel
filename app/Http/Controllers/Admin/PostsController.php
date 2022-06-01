@@ -14,20 +14,15 @@ use Illuminate\Support\Facades\Auth;
 class PostsController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->authorizeResource(Post::class, 'post');
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Post $post): JsonResponse
     {
-//        return response()->json(['posts' => auth()->user()->posts->toArray()]);
-        return response()->json(['posts' => Post::all()]);
+        $post->with('postUserLiked')->get();
+        return response()->json(['posts' => $post->with('postUserLiked')->get()]);
     }
 
 
@@ -66,7 +61,7 @@ class PostsController extends Controller
     {
 //        $image = $request->file('image');
 //        $path = $image->store('public/images');
-
+        $this->authorize('update', $post);
         $data = $request->validated();
 
         $post->update([
@@ -87,6 +82,7 @@ class PostsController extends Controller
      */
     public function destroy(Request $request, Post $post): JsonResponse
     {
+        $this->authorize('delete', $post);
         $path = public_path('/storage' . $post->image);
         if (file_exists($path)) {
             unlink($path);

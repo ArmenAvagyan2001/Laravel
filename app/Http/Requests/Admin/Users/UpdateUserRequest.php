@@ -22,7 +22,8 @@ class UpdateUserRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {   $user_id = $this->route('user')->id;
+    {
+        $user_id = $this->route('user')->id;
         return [
             'name' => ['min:2'],
             'email' => ['email', "unique:users,email,$user_id"],

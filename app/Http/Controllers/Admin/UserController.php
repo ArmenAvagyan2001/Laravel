@@ -6,37 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Users\UpdateUserRequest;
 use App\Mail\UserRegistrationMail;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use JetBrains\PhpStorm\NoReturn;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'user');
-    }
 
     /**
      * Display a listing of the resource.
      *
+     * @param User $user
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function index(User $user)
+    public function index(User $user): JsonResponse
     {
+        $this->authorize('viewAny', $user);
         return response()->json(['users' => $user->with('posts')->get()]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -45,24 +35,16 @@ class UserController extends Controller
      * @param UpdateUserRequest $request
      * @param User $user
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-        $user_email = $user->email;
+        $this->authorize('update', $user);
 
         $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
 
-        $user->update([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password'=> Hash::make($data['password']),
-            'email_verified_at' => $request['email_verified_at']
-        ]);
-
-        if ($user->email != $user_email){
-            Mail::to($user)->send(new UserRegistrationMail($user));
-            $user->email_verified_at = null;
-        }
+        $user->update($data);
 
         return response()->json(['user' => $user]);
     }
@@ -72,12 +54,20 @@ class UserController extends Controller
      *
      * @param User $user
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function destroy( User $user )
+    public function destroy(User $user): JsonResponse
     {
+        $this->authorize('delete', $user);
         $user->delete();
         return response()->json([
             'message' => 'Deleted'
         ]);
+    }
+
+    public function show(User $user): JsonResponse
+    {
+        $user->load('posts.postUserLiked');
+        return response()->json(['user' => $user]);
     }
 }

@@ -69,7 +69,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        return $this->response( Auth::user() );
+        return $this->response( Auth::user());
     }
 
 
