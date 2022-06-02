@@ -6,9 +6,6 @@ use App\Http\Controllers\Admin\UsersEmailTemplatesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PostsController;
 use App\Http\Controllers\Admin\UserController;
-use App\Models\User;
-use App\Models\userPostLike;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

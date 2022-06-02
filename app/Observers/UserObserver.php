@@ -34,7 +34,6 @@ class UserObserver
             Mail::to($user)->send(new UserRegistrationMail($user));
             $user->email_verified_at = null;
         }
-
     }
 
     /**
