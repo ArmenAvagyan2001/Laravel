@@ -21,12 +21,12 @@ class UsersEmailTemplatesController extends Controller
                     if (EmailTemplate::find($item)) {
                         Mail::to($userEmail)->send(new SendUserEmailTemplates($item));
                     }else {
-                        return response()->json(["message"=>"template with id $item does not exist"]);
+                        return response()->json(["message" => "template with id $item does not exist"]);
                     }
                 }
                 $user->emailTemplates()->attach($value);
             }else {
-                return response()->json(["message"=>"this user does not exist"]);
+                return response()->json(["message" => "this user does not exist"]);
             }
         }
     }

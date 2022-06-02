@@ -48,6 +48,8 @@ class AuthController extends Controller
             'role_id' => User::CLIENT,
         ]);
 
+        $user->assignRole('client');
+
         Mail::to($user)->send(new UserRegistrationMail($user));
         return $this->response($user);
     }
