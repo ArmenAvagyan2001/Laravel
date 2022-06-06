@@ -39,16 +39,14 @@ class AuthController extends Controller
     public function register (AuthRegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
-
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'verify_token' => bin2hex(random_bytes(10)),
-            'role_id' => User::CLIENT,
         ]);
 
-        $user->assignRole('client');
+        $user->assignRole($data['roles']);
 
         Mail::to($user)->send(new UserRegistrationMail($user));
         return $this->response($user);
@@ -58,8 +56,9 @@ class AuthController extends Controller
      * @param AuthLoginRequest $request
      * @return JsonResponse
      */
-    public function login(AuthLoginRequest $request): JsonResponse
+    public function login(AuthLoginRequest $request, User $user): JsonResponse
     {
+
         $validated = $request->validated();
         if ( !Auth::attempt( $validated ) ) {
             return response()->json([
@@ -70,8 +69,7 @@ class AuthController extends Controller
                 'message' => 'you need to verify your email address',
             ], 401);
         }
-
-        return $this->response( Auth::user());
+        return $this->response( Auth::user()->load('roles'));
     }
 
 

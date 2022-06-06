@@ -18,7 +18,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->role_id == User::ADMIN;
+        return $user->hasRole('admin');
     }
 
     /**
@@ -53,7 +53,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if ($user->id == User::ADMIN) {
+        if ($user->hasRole('admin')) {
             return true;
         }else {
             return $user->id == $model->id;
@@ -69,7 +69,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        if ($user->id == User::ADMIN) {
+        if ($user->hasRole('admin')) {
             return true;
         }else {
             return $user->id == $model->id;

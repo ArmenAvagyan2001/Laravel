@@ -17,7 +17,7 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role_id == User::CLIENT)
+        if (auth()->user()->hasRole('client'))
             return $next($request);
         else
             return response()->json(['error' => 'Forbidden'], 403);

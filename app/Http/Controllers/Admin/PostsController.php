@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Posts\StorePostsRequest;
 use App\Http\Requests\Admin\Posts\UpdatePostsRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -76,11 +77,11 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
      * @param Post $post
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function destroy(Request $request, Post $post): JsonResponse
+    public function destroy(Post $post): JsonResponse
     {
         $this->authorize('delete', $post);
         $path = public_path('/storage' . $post->image);

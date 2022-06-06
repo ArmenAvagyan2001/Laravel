@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\EmailTemplatesController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserPostLikedController;
 use App\Http\Controllers\Admin\UsersEmailTemplatesController;
 use App\Http\Controllers\AuthController;
@@ -45,6 +47,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'admin']], f
 
     //LIKE
     Route::post('like', [UserPostLikedController::class, 'like']);
+
+    //PERMISSIONS
+    Route::post('/permissions', [PermissionController::class, 'create']);
+    Route::delete('permissions/{permission}', [PermissionController::class, 'destroy']);
+    Route::put('permissions/{permission}', [PermissionController::class, 'update']);
+
+
+    Route::post('roles/{role}/assign-permissions', [RoleController::class, 'assignPermissions']);
 });
 
 Route::group(['prefix' => 'client', 'middleware' => ['auth:sanctum', 'client']], function () {
